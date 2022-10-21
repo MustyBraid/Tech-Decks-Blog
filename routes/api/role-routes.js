@@ -8,14 +8,6 @@ router.get("/all", async (req, res) => {
   res.json(roles);
 });
 
-//TODO: This one is broken
-router.get("/:name", async (req, res) => {
-  const roleData = await Role.findOne().catch((err) => {
-    res.json(err);
-  });
-  res.json(roleData);
-});
-
 router.post("/", async (req, res) => {
   try {
     await Role.create({

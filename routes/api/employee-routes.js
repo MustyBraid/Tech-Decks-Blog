@@ -6,6 +6,8 @@ router.post("/", async (req, res) => {
     await Employee.create({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
+      role_title: req.body.role_title,
+      manager_name: req.body.manager_name,
     });
     res.status(200);
     res.send();

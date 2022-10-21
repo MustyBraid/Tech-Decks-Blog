@@ -13,41 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(routes);
 
-//TODO: Rewrite this so we can test building an employee
-function createEmployeeQuestions() {
-  inquirer
-    .prompt([
-      {
-        name: "first_name",
-        type: "input",
-        message: "What is the employe's first name?",
-      },
-      {
-        name: "last_name",
-        type: "input",
-        message: "How about their last name?",
-      },
-      {
-        name: "role",
-        type: "list",
-        message: "What is their role",
-      },
-      {
-        name: "manager",
-        type: "input",
-        message: "What is their manager's name?",
-      },
-    ])
-    .then((answers) => {
-      if (answers.first_name) {
-        postTest();
-      } else {
-        console.log("please provide a first name :(");
-        inquirerTest();
-      }
-    });
-}
-
 function mainMenu() {
   inquirer
     .prompt([
@@ -73,7 +38,7 @@ function mainMenu() {
           employeeViewer();
           break;
         case "Add Employee":
-          employeeMaker();
+          createEmployeeQuestions();
           break;
         case "Update Employee Role":
           employeeGrabber();
@@ -96,26 +61,73 @@ function mainMenu() {
       }
     });
 }
-function postTest() {
-  axios({
-    method: "post",
-    url: "http://localhost:3001/api/employee/",
-    data: {
-      first_name: "Fred",
-      last_name: "Flintstone",
-    },
-  });
-}
 
 function employeeViewer() {
   axios({
     method: "get",
     url: "http://localhost:3001/api/employee/all",
-    //TODO: display what it gets
+  }).then((response) => {
+    console.table(response.data);
+    mainMenu();
   });
 }
 
-function employeeMaker() {}
+function createEmployeeQuestions() {
+  inquirer
+    .prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the employe's first name?",
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "How about their last name?",
+      },
+      {
+        name: "role",
+        type: "input",
+        message: "What is their role",
+      },
+      {
+        name: "manager",
+        type: "input",
+        message: "What is their manager's name?",
+      },
+    ])
+    .then((answers) => {
+      if (answers.first_name) {
+        employeeMaker(answers);
+      } else {
+        console.log("please provide at least a first name :(");
+        createEmployeeQuestions();
+      }
+    });
+}
+
+function employeeMaker(answers) {
+  axios({
+    method: "post",
+    url: "http://localhost:3001/api/employee/",
+    data: {
+      first_name: answers.first_name,
+      last_name: answers.last_name,
+      role_title: answers.role,
+      manager_name: answers.manager,
+    },
+  })
+    .then(
+      axios({
+        method: "post",
+        url: "http://localhost:3001/api/role",
+        data: {
+          title: answers.role,
+        },
+      })
+    )
+    .then(mainMenu());
+}
 
 function employeeGrabber() {
   axios
@@ -187,20 +199,3 @@ sequelize
     app.listen(PORT, () => console.log("Now listening on port: " + PORT));
   })
   .then(mainMenu());
-
-//FUNCTIONALITY:
-// What would you like to do?
-
-//View all employees
-// add employee:
-// id first_name last_name title department salary manager
-
-// update employee role
-//view all roles
-//add role:
-//name salary which_department
-
-//view all departments
-//add department:
-//name
-//quit
