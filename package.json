@@ -1,4 +1,6 @@
 {
+  "main": "server.js",
+  "author": "MustyBraid",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "connect-session-sequelize": "^7.1.5",
