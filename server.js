@@ -1,11 +1,11 @@
+const path = require("path");
 const express = require("express");
 const mysql = require("mysql2");
-const routes = require("./routes");
+const routes = require("./controllers");
 const session = require("express-session");
+const exphbs = require("express-handlebars");
 const sequelize = require("./config/connection");
 const axios = require("axios");
-const path = require("path");
-const exphbs = require("express-handlebars");
 const helpers = require("./utils/helpers");
 
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
