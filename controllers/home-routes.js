@@ -58,22 +58,4 @@ router.get("/searchName/:name", (req, res) => {
     });
 });
 
-router.get("/searchGithub/:github", (req, res) => {
-  // Get one alum from the alum table
-
-  User.findOne({
-    // Gets the alum based on the github given in the request parameters
-    where: {
-      github: req.params.github,
-    },
-  })
-    .then((githubData) => {
-      res.json(githubData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
 module.exports = router;

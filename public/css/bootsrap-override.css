@@ -126,15 +126,6 @@ aside {
   width: 150px
 }
 
-#profile-bio{
-  width: 700px;
-  height: 200px;
-  resize: none;
-}
-
-#profile-bio:disabled{
-  border-bottom: #ced4da;
-}
 
 .col-form-label{
   width: 75px;
